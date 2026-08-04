@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="cbet25158/libmpv-android-video-build"
+REPO="cbet25158/libmpv-android-binaries"
 DRY_RUN=0
 VERSION="v1.0.0"
 VERSION_SET=0

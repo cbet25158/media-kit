@@ -57,13 +57,13 @@ task downloadDependencies(type: Exec) {
         outputDir.mkdirs()
 
         // Download all *.jar dependencies & verify their SHA-256 checksums.
-        // Checksums track the release assets of cbet25158/libmpv-android-video-build;
+        // Checksums track the release assets of cbet25158/libmpv-android-binaries;
         // refresh them with tool/update_android_libmpv_artifacts.sh <tag> after publishing.
         def filesToDownload = [
-            ["url": "https://github.com/cbet25158/libmpv-android-video-build/releases/download/v1.0.0/default-arm64-v8a.jar", "sha256": "9d1066cc2dd189a5186da684110805be12c7270705f7f607bcec4a49454afc21", "destination": file("$buildDir/v1.0.0/default-arm64-v8a.jar")],
-            ["url": "https://github.com/cbet25158/libmpv-android-video-build/releases/download/v1.0.0/default-armeabi-v7a.jar", "sha256": "fdb823543536924f1458453cc13c37190937987d96c4678ae888be67f0a1f34e", "destination": file("$buildDir/v1.0.0/default-armeabi-v7a.jar")],
-            ["url": "https://github.com/cbet25158/libmpv-android-video-build/releases/download/v1.0.0/default-x86_64.jar", "sha256": "03fefd3c68ebfae823b0dcc86ebc80753f277e4bf3e90b8bed2c7d99c9b66192", "destination": file("$buildDir/v1.0.0/default-x86_64.jar")],
-            ["url": "https://github.com/cbet25158/libmpv-android-video-build/releases/download/v1.0.0/default-x86.jar", "sha256": "fa77c338c81f09699ca16189f602722c8ce2be27658991eb6e9677b73daf1e39", "destination": file("$buildDir/v1.0.0/default-x86.jar")]
+            ["url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-arm64-v8a.jar", "sha256": "9d1066cc2dd189a5186da684110805be12c7270705f7f607bcec4a49454afc21", "destination": file("$buildDir/v1.0.0/default-arm64-v8a.jar")],
+            ["url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-armeabi-v7a.jar", "sha256": "fdb823543536924f1458453cc13c37190937987d96c4678ae888be67f0a1f34e", "destination": file("$buildDir/v1.0.0/default-armeabi-v7a.jar")],
+            ["url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-x86_64.jar", "sha256": "03fefd3c68ebfae823b0dcc86ebc80753f277e4bf3e90b8bed2c7d99c9b66192", "destination": file("$buildDir/v1.0.0/default-x86_64.jar")],
+            ["url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-x86.jar", "sha256": "fa77c338c81f09699ca16189f602722c8ce2be27658991eb6e9677b73daf1e39", "destination": file("$buildDir/v1.0.0/default-x86.jar")]
         ]
 
         filesToDownload.each { fileInfo ->

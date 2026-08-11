@@ -3,17 +3,19 @@ set -euo pipefail
 
 REPO="media-kit/libmpv-darwin-build"
 DRY_RUN=0
+VIDEO_ONLY=0
 VERSION="v0.7.0"
 VERSION_SET=0
 
 usage() {
   cat <<'EOF'
 Usage:
-  tool/update_darwin_libmpv_artifacts.sh [version] [--dry-run] [--repo=<owner/name>]
+  tool/update_darwin_libmpv_artifacts.sh [version] [--dry-run] [--repo=<owner/name>] [--video-only]
 
 Example:
   tool/update_darwin_libmpv_artifacts.sh
   tool/update_darwin_libmpv_artifacts.sh v0.7.0
+  tool/update_darwin_libmpv_artifacts.sh 1.0.0 --repo=cbet25158/libmpv-darwin-build --video-only
 
 The script reads GitHub release asset digests and updates Darwin libmpv artifact
 versions/checksums. Existing CocoaPods Makefiles use .tar.gz assets. Future
@@ -29,11 +31,14 @@ for arg in "$@"; do
     --repo=*)
       REPO="${arg#--repo=}"
       ;;
+    --video-only)
+      VIDEO_ONLY=1
+      ;;
     -h|--help)
       usage
       exit 0
       ;;
-    v*)
+    v*|[0-9]*)
       if [[ "$VERSION_SET" -eq 1 ]]; then
         usage
         exit 64
@@ -178,6 +183,7 @@ update_artifact() {
   echo "${label}: ${tar_checksum}"
 }
 
+if [[ "$VIDEO_ONLY" -eq 0 ]]; then
 update_artifact \
   "iOS audio" \
   "ios" \
@@ -195,6 +201,7 @@ update_artifact \
   "Mpv" \
   "Swresample" \
   "Swscale"
+fi
 
 update_artifact \
   "iOS video" \
@@ -222,6 +229,7 @@ update_artifact \
   "Uchardet" \
   "Xml2"
 
+if [[ "$VIDEO_ONLY" -eq 0 ]]; then
 update_artifact \
   "macOS audio" \
   "macos" \
@@ -239,6 +247,7 @@ update_artifact \
   "Mpv" \
   "Swresample" \
   "Swscale"
+fi
 
 update_artifact \
   "macOS video" \

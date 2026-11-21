@@ -30,9 +30,22 @@ dependencies:
       url: https://github.com/cbet25158/media-kit.git
       ref: main
       path: ./media_kit_video
+
+dependency_overrides:
+  media_kit:
+    git:
+      url: https://github.com/cbet25158/media-kit.git
+      ref: main
+      path: ./media_kit
 ```
 
-两个包应使用相同的 Git 分支或提交；发布应用时可将 `ref` 固定到具体提交。
+三处 `ref` 必须相同。`main` 是最新版本；发布应用时建议固定到 tag（例如 `v1.1.0`）或完整的提交号。
+`dependency_overrides` 不能省略：`media_kit_video` 通过相对路径依赖 `media_kit`，pub 会把它解析成具体的提交号，
+与上面按分支名或 tag 名声明的 `media_kit` 对不上，`pub get` 会报 `version solving failed`。
+如果三处 `ref` 都写完整的提交号，可以不写 `dependency_overrides`。
+
+迁移到 native assets 之前的版本（带 `media_kit_libs_*` 包）保留在 `legacy-1.0` 分支。
+
 核心包的 Dart 构建钩子统一下载、校验、缓存和打包当前目标平台的 mpv、FFmpeg 及附属库。
 音频应用只需 `media_kit`，默认使用同一套音视频二进制。
 

@@ -2,29 +2,29 @@
   "schema": 1,
   "bundles": {
     "android_arm64": {
-      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-arm64-v8a.jar",
-      "sha256": "9d1066cc2dd189a5186da684110805be12c7270705f7f607bcec4a49454afc21",
+      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.1.0/default-arm64-v8a.jar",
+      "sha256": "c8be69b7c77bff548a4efa4f70f43b049c09b7ca03b17d71e69b114113d1a156",
       "format": "zip",
       "root": "lib/arm64-v8a",
       "library": "libmpv.so"
     },
     "android_arm": {
-      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-armeabi-v7a.jar",
-      "sha256": "fdb823543536924f1458453cc13c37190937987d96c4678ae888be67f0a1f34e",
+      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.1.0/default-armeabi-v7a.jar",
+      "sha256": "5a351b05eda8462ece7b9dc29a0a28f636662b844e244f14f2ae61dd9241a567",
       "format": "zip",
       "root": "lib/armeabi-v7a",
       "library": "libmpv.so"
     },
     "android_x64": {
-      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-x86_64.jar",
-      "sha256": "03fefd3c68ebfae823b0dcc86ebc80753f277e4bf3e90b8bed2c7d99c9b66192",
+      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.1.0/default-x86_64.jar",
+      "sha256": "1908a27027bca8c32ef021d8dab2b760d3606a12fce12f9688d114eff093f9dd",
       "format": "zip",
       "root": "lib/x86_64",
       "library": "libmpv.so"
     },
     "android_ia32": {
-      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-x86.jar",
-      "sha256": "fa77c338c81f09699ca16189f602722c8ce2be27658991eb6e9677b73daf1e39",
+      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.1.0/default-x86.jar",
+      "sha256": "7be9f2835fe899e86f8c56c7e27d197259ed45043bbd8e132782cd145e5ef70a",
       "format": "zip",
       "root": "lib/x86",
       "library": "libmpv.so"
@@ -54,29 +54,29 @@
       "library": "libmpv.so.2"
     },
     "ios_arm64": {
-      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.0.0/libmpv-xcframeworks_1.0.0_ios-universal-video-default.tar.gz",
-      "sha256": "fea47bde0abf2d61112eac457c25e6cb14aed06f5c969151e556fead09a4fbb3",
+      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.1.0/libmpv-xcframeworks_1.1.0_ios-universal-video-default.tar.gz",
+      "sha256": "a7c4f3a84e372e126acc31941f3ef7710d5ed022967aef9588c472b633abcc0c",
       "format": "tar.gz",
       "library": "Mpv",
       "xcframework": true
     },
     "ios_x64": {
-      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.0.0/libmpv-xcframeworks_1.0.0_ios-universal-video-default.tar.gz",
-      "sha256": "fea47bde0abf2d61112eac457c25e6cb14aed06f5c969151e556fead09a4fbb3",
+      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.1.0/libmpv-xcframeworks_1.1.0_ios-universal-video-default.tar.gz",
+      "sha256": "a7c4f3a84e372e126acc31941f3ef7710d5ed022967aef9588c472b633abcc0c",
       "format": "tar.gz",
       "library": "Mpv",
       "xcframework": true
     },
     "macos_arm64": {
-      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.0.0/libmpv-xcframeworks_1.0.0_macos-universal-video-default.tar.gz",
-      "sha256": "09ce22a9cd456672855c82cc616db70684adc202f05e406197189e4a41aa5276",
+      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.1.0/libmpv-xcframeworks_1.1.0_macos-universal-video-default.tar.gz",
+      "sha256": "3034f70c12d8fac175ce5c455eb65b1842eb3d7b4edfdb76a013c1b436095ad0",
       "format": "tar.gz",
       "library": "Mpv",
       "xcframework": true
     },
     "macos_x64": {
-      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.0.0/libmpv-xcframeworks_1.0.0_macos-universal-video-default.tar.gz",
-      "sha256": "09ce22a9cd456672855c82cc616db70684adc202f05e406197189e4a41aa5276",
+      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.1.0/libmpv-xcframeworks_1.1.0_macos-universal-video-default.tar.gz",
+      "sha256": "3034f70c12d8fac175ce5c455eb65b1842eb3d7b4edfdb76a013c1b436095ad0",
       "format": "tar.gz",
       "library": "Mpv",
       "xcframework": true

@@ -59,6 +59,10 @@ void main() {
         equals(Duration.zero),
       );
       expect(
+        state.bufferingSpeed,
+        equals(0),
+      );
+      expect(
         state.playlistMode,
         equals(PlaylistMode.none),
       );

@@ -56,6 +56,12 @@ class PlayerState {
   /// Current buffering percentage
   final double bufferingPercentage;
 
+  /// Current buffering speed in bytes per second.
+  /// This is how fast data is currently being read from the network (or any other input) into the cache.
+  /// It is `0` while nothing is being read e.g. the cache is full or nothing is loaded.
+  /// It also stays `0` while a media is still being opened, mpv only measures it once playback has data to cache.
+  final int bufferingSpeed;
+
   /// Current playlist mode.
   final PlaylistMode playlistMode;
 
@@ -107,6 +113,7 @@ class PlayerState {
     this.buffering = false,
     this.buffer = Duration.zero,
     this.bufferingPercentage = 0.0,
+    this.bufferingSpeed = 0,
     this.playlistMode = PlaylistMode.none,
     this.audioParams = const AudioParams(),
     this.videoParams = const VideoParams(),
@@ -133,6 +140,7 @@ class PlayerState {
     bool? buffering,
     Duration? buffer,
     double? bufferingPercentage,
+    int? bufferingSpeed,
     PlaylistMode? playlistMode,
     AudioParams? audioParams,
     VideoParams? videoParams,
@@ -157,6 +165,7 @@ class PlayerState {
       pitch: pitch ?? this.pitch,
       buffering: buffering ?? this.buffering,
       bufferingPercentage: bufferingPercentage ?? this.bufferingPercentage,
+      bufferingSpeed: bufferingSpeed ?? this.bufferingSpeed,
       buffer: buffer ?? this.buffer,
       playlistMode: playlistMode ?? this.playlistMode,
       audioParams: audioParams ?? this.audioParams,
@@ -189,6 +198,7 @@ class PlayerState {
       'pitch: $pitch, '
       'buffering: $buffering, '
       'bufferingPercentage: $bufferingPercentage, '
+      'bufferingSpeed: $bufferingSpeed, '
       'buffer: $buffer, '
       'playlistMode: $playlistMode, '
       'audioParams: $audioParams, '

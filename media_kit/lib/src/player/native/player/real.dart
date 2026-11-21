@@ -282,6 +282,9 @@ class NativePlayer extends PlatformPlayer {
         if (!bufferController.isClosed) {
           bufferController.add(Duration.zero);
         }
+        if (!bufferingSpeedController.isClosed) {
+          bufferingSpeedController.add(0);
+        }
         if (!videoParamsController.isClosed) {
           videoParamsController.add(const VideoParams());
         }
@@ -1446,6 +1449,17 @@ class NativePlayer extends PlatformPlayer {
           bufferingPercentageController.add(bufferingPercentage);
         }
       }
+      if (prop.ref.name.cast<Utf8>().toDartString() == 'cache-speed') {
+        // The property is unavailable (MPV_FORMAT_NONE) while nothing is loaded.
+        final bufferingSpeed =
+            prop.ref.format == generated.mpv_format.MPV_FORMAT_INT64
+                ? prop.ref.data.cast<Int64>().value
+                : 0;
+        state = state.copyWith(bufferingSpeed: bufferingSpeed);
+        if (!bufferingSpeedController.isClosed) {
+          bufferingSpeedController.add(bufferingSpeed);
+        }
+      }
       if (prop.ref.name.cast<Utf8>().toDartString() == 'time-pos' &&
           prop.ref.format == generated.mpv_format.MPV_FORMAT_DOUBLE) {
         final position = Duration(
@@ -2205,6 +2219,7 @@ class NativePlayer extends PlatformPlayer {
           'paused-for-cache': generated.mpv_format.MPV_FORMAT_FLAG,
           'demuxer-cache-time': generated.mpv_format.MPV_FORMAT_DOUBLE,
           'cache-buffering-state': generated.mpv_format.MPV_FORMAT_DOUBLE,
+          'cache-speed': generated.mpv_format.MPV_FORMAT_INT64,
           'audio-params': generated.mpv_format.MPV_FORMAT_NODE,
           'audio-bitrate': generated.mpv_format.MPV_FORMAT_DOUBLE,
           'video-bitrate': generated.mpv_format.MPV_FORMAT_DOUBLE,

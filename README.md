@@ -12,6 +12,8 @@
 
 5. 更新的 mpv 版本并优化二进制大小。
 
+6. 新增 `player.stream.bufferingSpeed` / `player.state.bufferingSpeed`：当前缓冲（下载）速度，单位为字节/秒，没有在读取数据时为 0；视频还在打开阶段时也为 0。
+
 ## 使用
 
 需要 Dart 3.10 / Flutter 3.38 或更新版本。仅需核心包和可选的视频渲染包：

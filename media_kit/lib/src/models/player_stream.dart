@@ -55,6 +55,12 @@ class PlayerStream {
   /// Current buffering percentage
   final Stream<double> bufferingPercentage;
 
+  /// Current buffering speed in bytes per second.
+  /// This is how fast data is currently being read from the network (or any other input) into the cache.
+  /// It is `0` while nothing is being read e.g. the cache is full or nothing is loaded.
+  /// It also stays `0` while a media is still being opened, mpv only measures it once playback has data to cache.
+  final Stream<int> bufferingSpeed;
+
   /// Current playlist mode.
   final Stream<PlaylistMode> playlistMode;
 
@@ -111,6 +117,7 @@ class PlayerStream {
     this.pitch,
     this.buffering,
     this.bufferingPercentage,
+    this.bufferingSpeed,
     this.buffer,
     this.playlistMode,
     this.audioParams,

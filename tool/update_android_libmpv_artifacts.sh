@@ -6,11 +6,17 @@ DRY_RUN=0
 VERSION="v1.0.0"
 VERSION_SET=0
 
-GRADLE_FILE="libs/android/media_kit_libs_android_video/android/build.gradle"
-JARS=("default-arm64-v8a.jar" "default-armeabi-v7a.jar" "default-x86_64.jar" "default-x86.jar")
+CATALOG="media_kit/hook/native_bundles.json"
+# "<release asset>:<bundle key in the catalog>"
+TARGETS=(
+  "default-arm64-v8a.jar:android_arm64"
+  "default-armeabi-v7a.jar:android_arm"
+  "default-x86_64.jar:android_x64"
+  "default-x86.jar:android_ia32"
+)
 
 usage() {
-  cat <<'EOF'
+  cat <<'USAGE'
 Usage:
   tool/update_android_libmpv_artifacts.sh [version] [--dry-run] [--repo=<owner/name>]
 
@@ -18,13 +24,13 @@ Example:
   tool/update_android_libmpv_artifacts.sh
   tool/update_android_libmpv_artifacts.sh v1.0.0
 
-The script reads GitHub release asset digests and rewrites the Android libmpv
-jar entries (url / sha256 / destination) in
-libs/android/media_kit_libs_android_video/android/build.gradle.
+The script reads GitHub release asset digests and rewrites the url / sha256 of
+the android_* entries in media_kit/hook/native_bundles.json. Other entries and
+the file's formatting are left untouched.
 
 Note: draft releases return 404 for anonymous API access - publish the release
 first.
-EOF
+USAGE
 }
 
 for arg in "$@"; do
@@ -54,8 +60,8 @@ for arg in "$@"; do
   esac
 done
 
-if [[ ! -f "$GRADLE_FILE" ]]; then
-  echo "error: $GRADLE_FILE not found (run from the repository root)" >&2
+if [[ ! -f "$CATALOG" ]]; then
+  echo "error: $CATALOG not found (run from the repository root)" >&2
   exit 1
 fi
 
@@ -87,40 +93,36 @@ digest_for() {
   '
 }
 
-update_jar_entry() {
-  local jar="$1"
-  local checksum="$2"
-  local url="https://github.com/${REPO}/releases/download/${VERSION}/${jar}"
+update_bundle() {
+  local key="$1"
+  local url="$2"
+  local checksum="$3"
 
   if [[ "$DRY_RUN" -eq 1 ]]; then
-    echo "Would update ${jar} in ${GRADLE_FILE}"
+    echo "Would update ${key} in ${CATALOG}"
     return
   fi
 
-  FILE_PATH="$GRADLE_FILE" JAR="$jar" URL="$url" CHECKSUM="$checksum" VERSION="$VERSION" ruby -e '
+  FILE_PATH="$CATALOG" KEY="$key" URL="$url" CHECKSUM="$checksum" ruby -e '
     path = ENV.fetch("FILE_PATH")
-    jar = ENV.fetch("JAR")
-    url = ENV.fetch("URL")
-    checksum = ENV.fetch("CHECKSUM")
-    version = ENV.fetch("VERSION")
+    key = ENV.fetch("KEY")
     contents = File.read(path)
 
-    pattern = /^(\s*)\["url": "[^"]*\/#{Regexp.escape(jar)}", "sha256": "[0-9a-fA-F]{64}", "destination": file\("\$buildDir\/[^"]+\/#{Regexp.escape(jar)}"\)\](,?)$/
-    replacement = nil
-    contents.sub!(pattern) do
-      replacement = "#{$1}[\"url\": \"#{url}\", \"sha256\": \"#{checksum}\", \"destination\": file(\"$buildDir/#{version}/#{jar}\")]#{$2}"
-    end
+    pattern = /("#{Regexp.escape(key)}": \{\s*"url": ")[^"]*(",\s*"sha256": ")[0-9a-fA-F]{64}(")/
+    replaced = contents.sub!(pattern) { "#{$1}#{ENV.fetch("URL")}#{$2}#{ENV.fetch("CHECKSUM")}#{$3}" }
 
-    abort("Entry for #{jar} was not found in #{path}") unless replacement
+    abort("Entry #{key} was not found in #{path}") unless replaced
 
     File.write(path, contents)
   '
 }
 
-for jar in "${JARS[@]}"; do
+for target in "${TARGETS[@]}"; do
+  jar="${target%%:*}"
+  key="${target##*:}"
   checksum="$(digest_for "$jar")"
-  update_jar_entry "$jar" "$checksum"
-  echo "${jar}: ${checksum}"
+  update_bundle "$key" "https://github.com/${REPO}/releases/download/${VERSION}/${jar}" "$checksum"
+  echo "${key} (${jar}): ${checksum}"
 done
 
 if [[ "$DRY_RUN" -eq 1 ]]; then

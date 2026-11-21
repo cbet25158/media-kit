@@ -7,6 +7,7 @@
 // LICENSE file.
 
 #include "video_output.h"
+#include "../common/video_dimensions.h"
 
 #include <algorithm>
 
@@ -46,17 +47,13 @@ VideoOutput::VideoOutput(int64_t handle,
             static_cast<int32_t>(height_.value_or(1)),
             flutter_adapter);
         
-        // Initialize mpv with the D3D11 device and swap chain
-        mpv_dxgi_init_params init_params = {
-            d3d11_renderer_->device(),
-            // Must provide swap chain, not nullptr
-            // Otherwise, you will get freeze.
-            d3d11_renderer_->swap_chain()
-        };
-        
+        // Initialize mpv with the D3D11 device. The render target is supplied
+        // per frame through MPV_RENDER_PARAM_D3D11_FBO in Render().
+        mpv_d3d11_init_params init_params = {d3d11_renderer_->device()};
+
         mpv_render_param params[] = {
-            {MPV_RENDER_PARAM_API_TYPE, MPV_RENDER_API_TYPE_DXGI},
-            {MPV_RENDER_PARAM_DXGI_INIT_PARAMS, &init_params},
+            {MPV_RENDER_PARAM_API_TYPE, MPV_RENDER_API_TYPE_D3D11},
+            {MPV_RENDER_PARAM_D3D11_INIT_PARAMS, &init_params},
             {MPV_RENDER_PARAM_INVALID, nullptr},
         };
         
@@ -122,6 +119,10 @@ VideoOutput::VideoOutput(int64_t handle,
 
 VideoOutput::~VideoOutput() {
   destroyed_ = true;
+  if (render_context_) {
+    // Stop the producer before draining queued tasks that borrow this object.
+    mpv_render_context_set_update_callback(render_context_, nullptr, nullptr);
+  }
   auto promise = std::promise<void>();
   if (texture_id_) {
     registrar_->texture_registrar()->UnregisterTexture(
@@ -142,14 +143,13 @@ VideoOutput::~VideoOutput() {
             promise.set_value();
           });
         });
+    promise.get_future().wait();
   }
-
-  promise.get_future().wait();
   texture_id_ = 0;
 
   thread_pool_ref_->Post([render_context = render_context_]() {
-    mpv_render_context_free(render_context);
-  });
+    if (render_context) mpv_render_context_free(render_context);
+  }).wait();
 }
 
 void VideoOutput::NotifyRender() {
@@ -164,9 +164,18 @@ void VideoOutput::Render() {
   if (texture_id_) {
     // H/W
     if (d3d11_renderer_ != nullptr) {
-      mpv_render_context_render(render_context_, nullptr);
-      mpv_render_context_report_swap(render_context_);
-      d3d11_renderer_->ProducerCommit();
+      // mpv renders into the mailbox slot owned by the producer and flushes
+      // its work to the immediate context before returning.
+      mpv_d3d11_fbo fbo = {d3d11_renderer_->render_target()};
+      mpv_render_param params[]{
+          {MPV_RENDER_PARAM_D3D11_FBO, &fbo},
+          {MPV_RENDER_PARAM_INVALID, nullptr},
+      };
+      // Publish the slot only if mpv actually rendered into it.
+      if (mpv_render_context_render(render_context_, params) >= 0) {
+        mpv_render_context_report_swap(render_context_);
+        d3d11_renderer_->ProducerCommit();
+      }
     }
     // S/W
     if (pixel_buffer_ != nullptr) {
@@ -371,34 +380,7 @@ int64_t VideoOutput::GetVideoWidth() {
     return width_.value();
   }
   // Video resolution dependent width.
-  int64_t width = 0;
-  int64_t height = 0;
-
-  mpv_node params;
-  mpv_get_property(handle_, "video-out-params", MPV_FORMAT_NODE, &params);
-
-  int64_t dw = 0, dh = 0, rotate = 0;
-  if (params.format == MPV_FORMAT_NODE_MAP) {
-    for (int32_t i = 0; i < params.u.list->num; i++) {
-      char* key = params.u.list->keys[i];
-      auto value = params.u.list->values[i];
-      if (value.format == MPV_FORMAT_INT64) {
-        if (strcmp(key, "dw") == 0) {
-          dw = value.u.int64;
-        }
-        if (strcmp(key, "dh") == 0) {
-          dh = value.u.int64;
-        }
-        if (strcmp(key, "rotate") == 0) {
-          rotate = value.u.int64;
-        }
-      }
-    }
-    mpv_free_node_contents(&params);
-  }
-
-  width = rotate == 0 || rotate == 180 ? dw : dh;
-  height = rotate == 0 || rotate == 180 ? dh : dw;
+  const auto [width, height] = media_kit::GetVideoDimensions(handle_);
 
   if (pixel_buffer_ != nullptr) {
     // Make sure |width| & |height| fit between |SW_RENDERING_MAX_WIDTH| &
@@ -420,34 +402,7 @@ int64_t VideoOutput::GetVideoHeight() {
     return height_.value();
   }
   // Video resolution dependent height.
-  int64_t width = 0;
-  int64_t height = 0;
-
-  mpv_node params;
-  mpv_get_property(handle_, "video-out-params", MPV_FORMAT_NODE, &params);
-
-  int64_t dw = 0, dh = 0, rotate = 0;
-  if (params.format == MPV_FORMAT_NODE_MAP) {
-    for (int32_t i = 0; i < params.u.list->num; i++) {
-      char* key = params.u.list->keys[i];
-      auto value = params.u.list->values[i];
-      if (value.format == MPV_FORMAT_INT64) {
-        if (strcmp(key, "dw") == 0) {
-          dw = value.u.int64;
-        }
-        if (strcmp(key, "dh") == 0) {
-          dh = value.u.int64;
-        }
-        if (strcmp(key, "rotate") == 0) {
-          rotate = value.u.int64;
-        }
-      }
-    }
-    mpv_free_node_contents(&params);
-  }
-
-  width = rotate == 0 || rotate == 180 ? dw : dh;
-  height = rotate == 0 || rotate == 180 ? dh : dw;
+  const auto [width, height] = media_kit::GetVideoDimensions(handle_);
 
   if (pixel_buffer_ != NULL) {
     // Make sure |width| & |height| fit between |SW_RENDERING_MAX_WIDTH| &

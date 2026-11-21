@@ -2438,7 +2438,6 @@ class NativePlayer extends PlatformPlayer {
             'seg_max_retry=5',
             'strict=experimental',
             'allowed_extensions=ALL',
-            'hls_ad_filter=${configuration.adBlocker ? 1 : 0}',
             'protocol_whitelist=[${configuration.protocolWhitelist.join(',')}]'
           ].join(','),
           'sub-ass': configuration.libass ? 'yes' : 'no',

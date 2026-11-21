@@ -2,29 +2,29 @@
   "schema": 1,
   "bundles": {
     "android_arm64": {
-      "url": "https://github.com/Predidit/libmpv-android-video-build/releases/download/v1.3.1/default-arm64-v8a.jar",
-      "sha256": "3bbceecd7616d5730e19865342a020834f00bdf77c25900e97c91a6e3e8141f8",
+      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-arm64-v8a.jar",
+      "sha256": "9d1066cc2dd189a5186da684110805be12c7270705f7f607bcec4a49454afc21",
       "format": "zip",
       "root": "lib/arm64-v8a",
       "library": "libmpv.so"
     },
     "android_arm": {
-      "url": "https://github.com/Predidit/libmpv-android-video-build/releases/download/v1.3.1/default-armeabi-v7a.jar",
-      "sha256": "96c37141ef20d1c73da01887f8ad6244aa7fccb44e805457d3eb15d2d71fde20",
+      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-armeabi-v7a.jar",
+      "sha256": "fdb823543536924f1458453cc13c37190937987d96c4678ae888be67f0a1f34e",
       "format": "zip",
       "root": "lib/armeabi-v7a",
       "library": "libmpv.so"
     },
     "android_x64": {
-      "url": "https://github.com/Predidit/libmpv-android-video-build/releases/download/v1.3.1/default-x86_64.jar",
-      "sha256": "f01e9f1890091f4dd856cd37247e442d151b7815a86306581a1e9317ec566136",
+      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-x86_64.jar",
+      "sha256": "03fefd3c68ebfae823b0dcc86ebc80753f277e4bf3e90b8bed2c7d99c9b66192",
       "format": "zip",
       "root": "lib/x86_64",
       "library": "libmpv.so"
     },
     "android_ia32": {
-      "url": "https://github.com/Predidit/libmpv-android-video-build/releases/download/v1.3.1/default-x86.jar",
-      "sha256": "29919fb6d0e4cd3855ef4c951f1d1e7784889e8715bad3007e718f18b425d4bd",
+      "url": "https://github.com/cbet25158/libmpv-android-binaries/releases/download/v1.0.0/default-x86.jar",
+      "sha256": "fa77c338c81f09699ca16189f602722c8ce2be27658991eb6e9677b73daf1e39",
       "format": "zip",
       "root": "lib/x86",
       "library": "libmpv.so"
@@ -54,29 +54,29 @@
       "library": "libmpv.so.2"
     },
     "ios_arm64": {
-      "url": "https://github.com/Predidit/libmpv-darwin-build/releases/download/0.6.8/libmpv-xcframeworks_0.6.8_ios-universal-video-default.tar.gz",
-      "sha256": "d428641cc6c100de8234eae04e229966e46949eb73fcabd526a008a02e9bf968",
+      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.0.0/libmpv-xcframeworks_1.0.0_ios-universal-video-default.tar.gz",
+      "sha256": "fea47bde0abf2d61112eac457c25e6cb14aed06f5c969151e556fead09a4fbb3",
       "format": "tar.gz",
       "library": "Mpv",
       "xcframework": true
     },
     "ios_x64": {
-      "url": "https://github.com/Predidit/libmpv-darwin-build/releases/download/0.6.8/libmpv-xcframeworks_0.6.8_ios-universal-video-default.tar.gz",
-      "sha256": "d428641cc6c100de8234eae04e229966e46949eb73fcabd526a008a02e9bf968",
+      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.0.0/libmpv-xcframeworks_1.0.0_ios-universal-video-default.tar.gz",
+      "sha256": "fea47bde0abf2d61112eac457c25e6cb14aed06f5c969151e556fead09a4fbb3",
       "format": "tar.gz",
       "library": "Mpv",
       "xcframework": true
     },
     "macos_arm64": {
-      "url": "https://github.com/Predidit/libmpv-darwin-build/releases/download/0.6.8/libmpv-xcframeworks_0.6.8_macos-universal-video-default.tar.gz",
-      "sha256": "c396976a267eaaa64bc603f3cc1a2ee02d27c7d5d57935d2458f364afdf0f3cb",
+      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.0.0/libmpv-xcframeworks_1.0.0_macos-universal-video-default.tar.gz",
+      "sha256": "09ce22a9cd456672855c82cc616db70684adc202f05e406197189e4a41aa5276",
       "format": "tar.gz",
       "library": "Mpv",
       "xcframework": true
     },
     "macos_x64": {
-      "url": "https://github.com/Predidit/libmpv-darwin-build/releases/download/0.6.8/libmpv-xcframeworks_0.6.8_macos-universal-video-default.tar.gz",
-      "sha256": "c396976a267eaaa64bc603f3cc1a2ee02d27c7d5d57935d2458f364afdf0f3cb",
+      "url": "https://github.com/cbet25158/libmpv-darwin-build/releases/download/1.0.0/libmpv-xcframeworks_1.0.0_macos-universal-video-default.tar.gz",
+      "sha256": "09ce22a9cd456672855c82cc616db70684adc202f05e406197189e4a41aa5276",
       "format": "tar.gz",
       "library": "Mpv",
       "xcframework": true
